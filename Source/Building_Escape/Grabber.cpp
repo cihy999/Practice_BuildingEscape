@@ -1,6 +1,8 @@
 // Copyright Cindy C 2022
 
 #include "DrawDebugHelpers.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 #include "Grabber.h"
 
 #define OUT // 協助辨識變數是不是Reference類型
@@ -20,8 +22,16 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle)
+	{
+		// Physics is found
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error,
+			TEXT("No physics handle component found on %s!"), *GetOwner()->GetName());
+	}
 }
 
 // Called every frame
@@ -47,4 +57,21 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		0,
 		5.f
 	);
+
+
+	FHitResult hit;
+	FCollisionQueryParams traceParams(FName(TEXT("")), false, GetOwner());
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT hit,
+		playerViewPointLocation,
+		lineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), // 過濾Collider分類
+		traceParams // 過濾射線通過的物件
+	);
+
+	AActor* actorHit = hit.GetActor();
+	if (actorHit)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Line trace has hit: %s"), *(actorHit->GetName()));
+	}
 }
