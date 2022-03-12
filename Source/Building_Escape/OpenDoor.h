@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/AudioComponent.h"
 #include "Engine/TriggerVolume.h"
 #include "OpenDoor.generated.h"
 
@@ -20,10 +21,16 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void FindPressurePlate();
+	void FindAudioComponent();
+
 	void OpenDoor(float DeltaTime);
 	void CloseDoor(float deltaTime);
 
 	float TotalMassOfActors() const;
+
+	bool OpenDoorSound = false;
+	bool CloseDoorSound = true;
 
 protected:
 	// Called when the game starts
@@ -55,4 +62,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float MassToOpenDoors = 60.0f;
+
+	UPROPERTY()
+	UAudioComponent* AudioComponent = nullptr;
 };

@@ -36,6 +36,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Reach = 100.f;
 
+	UPROPERTY() // 讓 UE 不要自動回收
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	UPROPERTY() // 讓 UE 不要自動回收
 	UInputComponent* InputComponent = nullptr;
 };
