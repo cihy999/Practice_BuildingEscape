@@ -23,6 +23,8 @@ public:
 	void OpenDoor(float DeltaTime);
 	void CloseDoor(float deltaTime);
 
+	float TotalMassOfActors() const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -49,8 +51,8 @@ private:
 	float DoorCloseSpeed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
+	ATriggerVolume* PressurePlate = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	AActor* ActorThatOpen;
+	float MassToOpenDoors = 60.0f;
 };

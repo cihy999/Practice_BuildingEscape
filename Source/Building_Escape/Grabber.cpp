@@ -20,7 +20,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (PhysicsHandle->GrabbedComponent)
+	if (PhysicsHandle && PhysicsHandle->GrabbedComponent)
 	{
 		// 移動抓著的物件
 		PhysicsHandle->SetTargetLocation(GetPlayerReach());
@@ -39,7 +39,7 @@ void UGrabber::BeginPlay()
 void UGrabber::FindPhysicsHandle()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (PhysicsHandle == nullptr)
+	if (!PhysicsHandle)
 	{
 		UE_LOG(LogTemp, Error,
 			TEXT("No physics handle component found on %s!"), *GetOwner()->GetName());
@@ -68,9 +68,13 @@ void UGrabber::Grab()
 {
 	FHitResult result = GetFirstPhysicsBodyInReach();
 	UPrimitiveComponent* componentToGrab = result.GetComponent();
+	AActor* actorHit = result.GetActor();
 
-	if (result.GetActor())
+	if (actorHit)
 	{
+		if (!PhysicsHandle)
+			return;
+
 		// 抓取目標物
 		PhysicsHandle->GrabComponentAtLocation(
 			componentToGrab,
@@ -81,6 +85,9 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
+	if (!PhysicsHandle)
+		return;
+
 	// 放開抓著的物件
 	PhysicsHandle->ReleaseComponent();
 }

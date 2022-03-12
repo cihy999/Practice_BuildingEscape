@@ -33,6 +33,7 @@ private:
 	FVector GetPlayerReach() const;
 	FHitResult GetFirstPhysicsBodyInReach() const;
 
+	UPROPERTY(EditAnywhere)
 	float Reach = 100.f;
 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
